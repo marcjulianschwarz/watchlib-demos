@@ -10,6 +10,7 @@ from watchlib.analysis import heart_rate_variability, bpm, stats
 from watchlib.plot import plot_ecg, distribution_for
 from watchlib.utils.structs import ECG, WorkoutRoute
 
+st.set_page_config(layout="wide")
 
 def header():
     st.write("# Watchlib Demo")    
@@ -157,7 +158,32 @@ def start():
                         ani = wa.animate()
                         html = ani.to_jshtml()
                         st.session_state.route_html = html
+                    
                     components.html(st.session_state.route_html, height=800)
+                    ex = st.expander("Show more details")
+                    with ex:
+                        one, two, three, four = ex.columns(4)
+                        with one:
+                            st.write("#### Speed")
+                            st.write(f"Max: {round(st.session_state.selected_route.speed.max()*60*60/1000, 2)} km/h")
+                            st.write(f"Min: {round(st.session_state.selected_route.speed.min()*60*60/1000, 2)} km/h")
+                            st.write(f"Avg: {round(st.session_state.selected_route.speed.mean()*60*60/1000, 2)} km/h")
+                        with two:
+                            st.write("#### Elevation")
+                            st.write(f"Max: {round(st.session_state.selected_route.elevation.max(),2)} m")
+                            st.write(f"Min: {round(st.session_state.selected_route.elevation.min(),2)} m")
+                            st.write(f"Avg: {round(st.session_state.selected_route.elevation.mean(),2)} m")
+                        with three:
+                            st.write("#### hAcc")
+                            st.write(f"Max: {round(st.session_state.selected_route.hAcc.max(),2)}")
+                            st.write(f"Min: {round(st.session_state.selected_route.hAcc.min(),2)}")
+                            st.write(f"Avg: {round(st.session_state.selected_route.hAcc.mean(),2)}")
+                        with four:
+                            st.write("#### vAcc")
+                            st.write(f"Max: {round(st.session_state.selected_route.vAcc.max(),2)}")
+                            st.write(f"Min: {round(st.session_state.selected_route.vAcc.min(),2)}")
+                            st.write(f"Avg: {round(st.session_state.selected_route.vAcc.mean(),2)}")
+
 
                 if "route_html" in st.session_state and not ch.is_animation_cached(name):
                     ch.cache_route_animation(st.session_state.route_html, name)
